@@ -1,11 +1,13 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.ui;
 
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import no.knut.addem.android.addem.core.Number;
+
 public class NumberButton {
 
-    public Number number;
+    public no.knut.addem.android.addem.core.Number number;
     public Rect rect;
     public Paint paint;
 

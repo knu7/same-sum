@@ -1,4 +1,4 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,21 +10,22 @@ import android.view.View;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
-public class Board extends View implements View.OnTouchListener {
+import no.knut.addem.android.addem.core.*;
+import no.knut.addem.android.addem.core.Number;
+
+public class BoardFragment extends View implements View.OnTouchListener {
 
     private final float PADDING_PERCENTAGE = 0.1f;
     private final float SPACING_BETWEEN_BUTTONS_PERCENTAGE = 0.3f;
     private final float TEXT_PADDING_PERCENTAGE = 0.2f;
     private final int[] Colors = new int[]{Color.BLUE, Color.RED, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.YELLOW};
 
-    private Random random = new Random();
     private Stack<Stack<NumberButton>> sums = new Stack<>();
     private Stack<NumberButton> currentSum;
-    public int rows, columns, maxNumber;
+    private Board board;
     private Context context;
     private NumberButton[] numberButtons;
     private Paint basicPaint;
@@ -34,13 +35,11 @@ public class Board extends View implements View.OnTouchListener {
     private float textHeight;
 
 
-    public Board(Context context, int rows, int columns, int maxNumber) {
+    public BoardFragment(Context context, Board board) {
         super(context);
-        this.rows = rows;
-        this.columns = columns;
-        this.maxNumber = maxNumber;
         this.context = context;
-        numberButtons = new NumberButton[rows*columns];
+        this.board = board;
+        numberButtons = new NumberButton[board.getRows() * board.getColumns()];
         basicPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         basicPaint.setStyle(Paint.Style.FILL);
         basicPaint.setColor(Color.LTGRAY);
@@ -86,18 +85,8 @@ public class Board extends View implements View.OnTouchListener {
         invalidate();
     }
 
-    public Number[] getBoard(){
-
-        Number[] board = new Number[numberButtons.length];
-
-        for (int i = 0; i < numberButtons.length; i++){
-            board[i] = numberButtons[i].number;
-        }
-        return board;
-    }
-
     public Solution getSolution(){
-        Set<Set<Number>> sumsAsSet = new HashSet<>();
+        Set<Set<no.knut.addem.android.addem.core.Number>> sumsAsSet = new HashSet<>();
 
         for (Stack<NumberButton> sum : sums){
 
@@ -117,7 +106,7 @@ public class Board extends View implements View.OnTouchListener {
         super.onSizeChanged(w, h, oldw, oldh);
 
         float allocatedWidth = w - w * PADDING_PERCENTAGE;
-        int maxWidth = (int)(allocatedWidth / rows);
+        int maxWidth = (int)(allocatedWidth / board.getColumns());
         float spaceWidth = maxWidth * SPACING_BETWEEN_BUTTONS_PERCENTAGE;
         int buttonWidth = (int) (maxWidth - spaceWidth);
 
@@ -131,15 +120,12 @@ public class Board extends View implements View.OnTouchListener {
         textHeight = textBounds.height();
 
         int index = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                int left = i * ((int)spaceWidth + buttonWidth) + x;
-                int top = j * ((int)spaceWidth + buttonWidth);
-                Rect rect = new Rect(left, top, left + buttonWidth, top + buttonWidth);
-                Number number = new Number(i, j, random.nextInt(maxNumber) + 1);
-                numberButtons[index] = new NumberButton(number, rect, basicPaint);
-                index++;
-            }
+        for (Number number : board.getNumbers()){
+            int left = number.getRow() * ((int)spaceWidth + buttonWidth) + x;
+            int top = number.getColumn() * ((int)spaceWidth + buttonWidth);
+            Rect rect = new Rect(left, top, left + buttonWidth, top + buttonWidth);
+            numberButtons[index] = new NumberButton(number, rect, basicPaint);
+            index++;
         }
     }
 
@@ -150,7 +136,7 @@ public class Board extends View implements View.OnTouchListener {
         for (NumberButton button : numberButtons){
             Paint p = button.paint;
             canvas.drawRect(button.rect, button.paint);
-            canvas.drawText(""+button.number.number, button.rect.centerX(), button.rect.centerY() + textHeight / 2.0f, textPaint);
+            canvas.drawText(""+button.number.getValue(), button.rect.centerX(), button.rect.centerY() + textHeight / 2.0f, textPaint);
         }
     }
 
@@ -194,10 +180,10 @@ public class Board extends View implements View.OnTouchListener {
         if (buttonTouched == prevButton)
             return true;
 
-        if (Math.abs(buttonTouched.number.row - prevButton.number.row) > 1)
+        if (Math.abs(buttonTouched.number.getRow() - prevButton.number.getRow()) > 1)
             return true;
 
-        if (Math.abs(buttonTouched.number.column - prevButton.number.column) > 1)
+        if (Math.abs(buttonTouched.number.getRow() - prevButton.number.getRow()) > 1)
             return true;
 
         currentSum.push(buttonTouched);

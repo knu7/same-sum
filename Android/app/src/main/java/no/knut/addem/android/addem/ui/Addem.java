@@ -1,4 +1,4 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import no.knut.addem.android.addem.R;
+import no.knut.addem.android.addem.ui.Game;
 
 
 public class Addem extends ActionBarActivity implements View.OnClickListener {

@@ -1,30 +1,62 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.ui;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import de.greenrobot.event.EventBus;
+import no.knut.addem.android.addem.R;
+import no.knut.addem.android.addem.core.Solution;
+import no.knut.addem.android.addem.events.OptimalSolutionReadyEvent;
+
 
 public class ResultScreen extends ActionBarActivity {
+
+    private final static String LOG_KEY = "ResultScreen";
+    private TextView optimalSolutionTextView;
+    private EventBus eventBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_screen);
         Bundle extras = getIntent().getExtras();
-        Solution optimalSolution = (Solution) extras.getSerializable(Game.OPTIMAL_SOLUTION);
+        eventBus = EventBus.getDefault();
+        eventBus.register(this);
+
+        Object optimalSolutionOrNull = extras.getSerializable(Game.OPTIMAL_SOLUTION);
+
+
         Solution playerSolution = (Solution) extras.getSerializable(Game.PLAYER_SOLUTION);
 
         TextView playerScoreTextView = (TextView) findViewById(R.id.yourScoreTextView);
-        TextView optimalSolutionTextView = (TextView) findViewById(R.id.optimalSolutionTextView);
+        optimalSolutionTextView = (TextView) findViewById(R.id.optimalSolutionTextView);
 
         playerScoreTextView.setText(""+playerSolution.getScore());
-        optimalSolutionTextView.setText("The optimal score of " + optimalSolution.getScore()
-                + " was found by your smartphone in " + optimalSolution.getSecondsSpent() + " seconds");
+
+        if(optimalSolutionOrNull != null){
+            Solution optimalSolution = (Solution)optimalSolutionOrNull;
+            displayOptimalSolution(optimalSolution);
+        }
+
     }
 
+    @Override
+    protected void onDestroy() {
+        eventBus.unregister(this);
+        super.onDestroy();
+    }
+
+    private void displayOptimalSolution(Solution solution){
+        optimalSolutionTextView.setText("The optimal score of " + solution.getScore()
+                + " was found by your smartphone in " + solution.getSecondsSpent() + " seconds");
+    }
+
+    public void onEventMainThread(OptimalSolutionReadyEvent event){
+        displayOptimalSolution(event.getSolution());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

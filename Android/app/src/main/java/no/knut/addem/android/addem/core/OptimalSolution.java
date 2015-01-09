@@ -1,9 +1,7 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.core;
 
 
-import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
+import android.os.AsyncTask;
 
 import com.google.common.collect.Sets;
 
@@ -16,38 +14,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class OptimalSolution extends AsyncTaskLoader<Solution>{
+import de.greenrobot.event.EventBus;
+import no.knut.addem.android.addem.events.OptimalSolutionReadyEvent;
 
-    private Number[] board;
-    private int maxNumber;
+public class OptimalSolution extends AsyncTask<Board, Void, Solution> {
+    private final static String LOG_KEY = "OptimalSolution";
 
-    public OptimalSolution(Context context, Number[] board, int maxNumber) {
-        super(context);
-        this.board = board;
-        this.maxNumber = maxNumber;
+    @Override protected Solution doInBackground(Board... boards) {
+        Board board = boards[0];
+        return getSolution(board.getNumbers(), board.getMaxValue());
     }
 
-    @Override
-    public Solution loadInBackground() {
-        Log.d("", "optimal");
-        return getSolution(board, maxNumber);
+    @Override protected void onPostExecute(Solution optimalSolution) {
+        EventBus.getDefault().post(new OptimalSolutionReadyEvent(optimalSolution));
     }
 
-    @Override
-    protected void onStartLoading() {
-
-        forceLoad();
-    }
-
-    @Override
-    public void deliverResult(Solution data) {
-        super.deliverResult(data);
-    }
-
-    private Solution getSolution(Number[] board, int maxNumber){
-
+    private static Solution getSolution(no.knut.addem.android.addem.core.Number[] numbers, int maxNumber){
         float startTime = System.currentTimeMillis();
-        Set<Set<Number>> allPossibleSums = getAllPossibleSums(board, maxNumber);
+        Set<Set<Number>> allPossibleSums = getAllPossibleSums(numbers, maxNumber);
         Map<Integer, Set<Set<Number>>> sumCounts = new HashMap<>();
 
         boolean intersectingSet;
@@ -57,8 +41,8 @@ public class OptimalSolution extends AsyncTaskLoader<Solution>{
         for (Set<Number> set : allPossibleSums){
 
             sum = 0;
-            for (Number btn : set)
-                sum += btn.number;
+            for (Number number : set)
+                sum += number.getValue();
 
             if (sumCounts.containsKey(sum)) {
                 Set<Set<Number>> currentSetOfSets = sumCounts.get(sum);
@@ -78,11 +62,11 @@ public class OptimalSolution extends AsyncTaskLoader<Solution>{
 
                 currentSetOfSets.add(set);
 
-                if (currentScore + set.size() == board.length)
+                if (currentScore + set.size() == numbers.length)
                 {
                     Set<Set<Number>> wrongSet = new HashSet<>();
                     float timeSpent = System.currentTimeMillis() - startTime;
-                    return new Solution(currentSetOfSets, timeSpent, board.length, currentSetOfSets, wrongSet);
+                    return new Solution(currentSetOfSets, timeSpent, numbers.length, currentSetOfSets, wrongSet);
                 }
             }
             else{
@@ -117,7 +101,7 @@ public class OptimalSolution extends AsyncTaskLoader<Solution>{
 
     }
 
-    private Set<Set<Number>> getAllPossibleSums(Number[] board, int maxNumber){
+    private static Set<Set<Number>> getAllPossibleSums(Number[] board, int maxNumber){
 
         Set<Set<Number>> desiredSet = new HashSet<>();
         Set<Number> boardAsSet = new HashSet<>(Arrays.asList(board));
@@ -147,9 +131,9 @@ public class OptimalSolution extends AsyncTaskLoader<Solution>{
                 Number v = S.pop();
 
                 for (Number w : list){
-                    if (Math.abs(v.row - w.row) > 1)
+                    if (Math.abs(v.getRow() - w.getRow()) > 1)
                         continue;
-                    if (Math.abs(v.column - w.column) > 1)
+                    if (Math.abs(v.getColumn() - w.getColumn()) > 1)
                         continue;
 
                     S.push(w);
@@ -167,5 +151,4 @@ public class OptimalSolution extends AsyncTaskLoader<Solution>{
 
         return desiredSet;
     }
-
 }

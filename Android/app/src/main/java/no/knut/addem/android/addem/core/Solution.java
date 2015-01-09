@@ -1,4 +1,4 @@
-package no.knut.addem.android.addem;
+package no.knut.addem.android.addem.core;
 
 
 import java.io.Serializable;
@@ -7,9 +7,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import no.knut.addem.android.addem.core.Number;
+
 public class Solution implements Serializable{
 
-    public Set<Set<Number>> sums;
+    public Set<Set<no.knut.addem.android.addem.core.Number>> sums;
     private Set<Set<Number>> correctSums = null;
     private Set<Set<Number>> wrongSums = null;
     private Integer score = null;
@@ -77,7 +79,7 @@ public class Solution implements Serializable{
         for (Set<Number> sumSet : sums){
             int sum = 0;
             for (Number btn : sumSet)
-                sum += btn.number;
+                sum += btn.getValue();
 
             if (equalSumsMap.containsKey(sum)) {
                 Set<Set<Number>> currentSetOfSets = equalSumsMap.get(sum);

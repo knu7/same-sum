@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="no.knut.addem.android.addem.ResultScreen">
+    tools:context="no.knut.addem.android.addem.ui.ResultScreen">
 
     <LinearLayout
         android:orientation="vertical"
@@ -39,7 +39,7 @@
             android:layout_marginTop="70dp">
 
             <TextView
-                android:text="The optimal score of 9 was found by your smartphone in 0.2 seconds"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="25dp"

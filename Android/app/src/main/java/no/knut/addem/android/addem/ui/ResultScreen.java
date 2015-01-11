@@ -1,5 +1,6 @@
 package no.knut.addem.android.addem.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,6 +18,7 @@ public class ResultScreen extends ActionBarActivity {
     private final static String LOG_KEY = "ResultScreen";
     private TextView optimalSolutionTextView;
     private EventBus eventBus;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,12 @@ public class ResultScreen extends ActionBarActivity {
         playerScoreTextView.setText(""+playerSolution.getScore());
 
         if(optimalSolutionOrNull != null){
-            Solution optimalSolution = (Solution)optimalSolutionOrNull;
+            OptimalSolutionReadyEvent optimalSolution = (OptimalSolutionReadyEvent)optimalSolutionOrNull;
             displayOptimalSolution(optimalSolution);
         }
-
+        else{
+            progressDialog = ProgressDialog.show(this, "WAIT!", "Finding optimal solution");
+        }
     }
 
     @Override
@@ -49,13 +53,17 @@ public class ResultScreen extends ActionBarActivity {
         super.onDestroy();
     }
 
-    private void displayOptimalSolution(Solution solution){
+    private void displayOptimalSolution(OptimalSolutionReadyEvent solutionEvent){
+        Solution solution = solutionEvent.getSolution();
         optimalSolutionTextView.setText("The optimal score of " + solution.getScore()
-                + " was found by your smartphone in " + solution.getSecondsSpent() + " seconds");
+                + " was found by your smartphone in " + solution.getSecondsSpent() + " seconds"
+                + " after checking " + solutionEvent.getSumsChecked() + " sums."
+                );
     }
 
     public void onEventMainThread(OptimalSolutionReadyEvent event){
-        displayOptimalSolution(event.getSolution());
+        displayOptimalSolution(event);
+        progressDialog.dismiss();
     }
 
     @Override

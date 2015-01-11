@@ -2,6 +2,7 @@ package no.knut.addem.android.addem.core;
 
 
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
 import com.google.common.collect.Sets;
 
@@ -17,29 +18,30 @@ import java.util.Stack;
 import de.greenrobot.event.EventBus;
 import no.knut.addem.android.addem.events.OptimalSolutionReadyEvent;
 
-public class OptimalSolution extends AsyncTask<Board, Void, Solution> {
+public class OptimalSolution extends AsyncTask<Board, Void, OptimalSolutionReadyEvent> {
     private final static String LOG_KEY = "OptimalSolution";
 
-    @Override protected Solution doInBackground(Board... boards) {
+    @Override protected OptimalSolutionReadyEvent doInBackground(Board... boards) {
         Board board = boards[0];
         return getSolution(board.getNumbers(), board.getMaxValue());
     }
 
-    @Override protected void onPostExecute(Solution optimalSolution) {
-        EventBus.getDefault().post(new OptimalSolutionReadyEvent(optimalSolution));
+    @Override protected void onPostExecute(OptimalSolutionReadyEvent optimalSolution) {
+        EventBus.getDefault().post(optimalSolution);
     }
 
-    private static Solution getSolution(no.knut.addem.android.addem.core.Number[] numbers, int maxNumber){
-        float startTime = System.currentTimeMillis();
+    private static OptimalSolutionReadyEvent getSolution(Number[] numbers, int maxNumber){
+        float startTime = SystemClock.currentThreadTimeMillis();
         Set<Set<Number>> allPossibleSums = getAllPossibleSums(numbers, maxNumber);
         Map<Integer, Set<Set<Number>>> sumCounts = new HashMap<>();
 
         boolean intersectingSet;
         int sum;
         int currentScore;
+        int sumsChecked = 0;
 
         for (Set<Number> set : allPossibleSums){
-
+            sumsChecked++;
             sum = 0;
             for (Number number : set)
                 sum += number.getValue();
@@ -66,7 +68,8 @@ public class OptimalSolution extends AsyncTask<Board, Void, Solution> {
                 {
                     Set<Set<Number>> wrongSet = new HashSet<>();
                     float timeSpent = System.currentTimeMillis() - startTime;
-                    return new Solution(currentSetOfSets, timeSpent, numbers.length, currentSetOfSets, wrongSet);
+                    Solution solution = new Solution(currentSetOfSets, timeSpent, numbers.length, currentSetOfSets, wrongSet);
+                    return new OptimalSolutionReadyEvent(solution, sumsChecked);
                 }
             }
             else{
@@ -96,8 +99,9 @@ public class OptimalSolution extends AsyncTask<Board, Void, Solution> {
         }
 
         Set<Set<Number>> wrongSet = new HashSet<>();
-        float timeSpent = System.currentTimeMillis() - startTime;
-        return new Solution(highScoreSet, timeSpent, highestScore, highScoreSet, wrongSet);
+        float timeSpent = SystemClock.currentThreadTimeMillis() - startTime;
+        Solution solution = new Solution(highScoreSet, timeSpent, highestScore, highScoreSet, wrongSet);
+        return new OptimalSolutionReadyEvent(solution, sumsChecked);
 
     }
 

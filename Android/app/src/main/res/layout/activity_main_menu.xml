@@ -8,4 +8,10 @@
         android:layout_height="wrap_content"
         android:text="Singleplayer"
         android:id="@+id/singlePlayerButton" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Multiplayer"
+        android:id="@+id/matchMakingButton" />
 </LinearLayout>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="no.knut.addem.android.addem">
+    package="no.knut.addem.android.addem" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -28,10 +29,13 @@
         <uses-feature
             android:glEsVersion="0x00020000"
             android:required="true" />
-
         <activity
             android:name=".ui.ResultScreen"
             android:label="@string/title_activity_result_screen" >
+        </activity>
+        <activity
+            android:name=".ui.Matchmaking"
+            android:label="@string/title_activity_matchmaking" >
         </activity>
     </application>
 

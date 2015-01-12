@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import no.knut.addem.android.addem.R;
-import no.knut.addem.android.addem.ui.Game;
 
 
 public class Addem extends ActionBarActivity implements View.OnClickListener {
@@ -18,6 +17,7 @@ public class Addem extends ActionBarActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         findViewById(R.id.singlePlayerButton).setOnClickListener(this);
+        findViewById(R.id.matchMakingButton).setOnClickListener(this);
 
     }
 
@@ -50,6 +50,9 @@ public class Addem extends ActionBarActivity implements View.OnClickListener {
 
             case R.id.singlePlayerButton:
                 startActivity(new Intent(this, Game.class));
+                break;
+            case R.id.matchMakingButton:
+                startActivity(new Intent(this, Matchmaking.class));
                 break;
         }
     }

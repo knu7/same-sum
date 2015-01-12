@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Map;
+import models.Number;
 
 public class Round {
 	
@@ -8,6 +9,10 @@ public class Round {
 	private Number[][] board;
 	private Map<Long, Solution> solutions;
 	
+	public Round(Number[][] board, int playerCount) {
+		this.playerCount = playerCount;
+		this.board = board;
+	}
 	public Number[][] getBoard() {
 		return board;
 	}
@@ -22,8 +27,8 @@ public class Round {
 		if (solutions.size() < playerCount)
 			return null;
 		
-		
-		return new RoundResult();
+		long winnerId = 0;
+		return new RoundResult(winnerId);
 		
 		
 	}

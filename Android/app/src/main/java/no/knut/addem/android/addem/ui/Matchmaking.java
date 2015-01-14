@@ -24,7 +24,7 @@ public class Matchmaking extends ActionBarActivity {
         setContentView(R.layout.activity_matchmaking);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.10.100:9000")
+                .setEndpoint("http://192.168.0.15:9000")
                 .build();
 
         MatchmakingAPI matchmakingAPI = restAdapter.create(MatchmakingAPI.class);

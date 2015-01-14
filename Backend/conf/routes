@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /matchmaking/:userId 		@controllers.MatchmakingCtrl.getMatch(userId:Long)
+GET     /matchmaking/:userId 					@controllers.MatchmakingCtrl.getMatch(userId:Long)
+#GET		/games/:gameId/current-round/:userId		
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

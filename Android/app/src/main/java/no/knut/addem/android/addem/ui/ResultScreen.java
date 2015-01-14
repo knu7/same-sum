@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import no.knut.addem.android.addem.R;
+import no.knut.addem.android.addem.core.Board;
 import no.knut.addem.android.addem.core.Solution;
 import no.knut.addem.android.addem.events.OptimalSolutionReadyEvent;
 
@@ -25,6 +27,7 @@ public class ResultScreen extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_screen);
         Bundle extras = getIntent().getExtras();
+
         eventBus = EventBus.getDefault();
         eventBus.register(this);
 
@@ -32,6 +35,11 @@ public class ResultScreen extends ActionBarActivity {
 
 
         Solution playerSolution = (Solution) extras.getSerializable(Game.PLAYER_SOLUTION);
+
+        Board board = (Board)extras.getSerializable(Game.BOARD);
+        addContentView(new BoardScoreView(this, board, new BoardView.Settings(), playerSolution),
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
 
         TextView playerScoreTextView = (TextView) findViewById(R.id.yourScoreTextView);
         optimalSolutionTextView = (TextView) findViewById(R.id.optimalSolutionTextView);

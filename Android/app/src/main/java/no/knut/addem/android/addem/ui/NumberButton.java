@@ -9,9 +9,9 @@ import no.knut.addem.android.addem.core.Number;
 public class NumberButton {
 
     public no.knut.addem.android.addem.core.Number number;
-    public Rect rect;
     public Path octagon;
     public Paint paint;
+    private Rect rect;
     private float halfWidth;
     private float quarterWidth;
     private float halfHeight;
@@ -22,24 +22,16 @@ public class NumberButton {
         this.rect = rect;
         this.paint = paint;
 
-        halfWidth = rect.width() / 2.0f;
-        quarterWidth = halfWidth / 2.0f;
-        halfHeight = rect.height() / 2.0f;
-        quarterHeight = halfHeight / 2.0f;
+        createOctagon(rect);
+    }
 
-        octagon = new Path();
-        octagon.lineTo(rect.left + quarterWidth, rect.top);
-        octagon.rLineTo(halfWidth, 0);
-        octagon.rLineTo(quarterWidth, quarterHeight);
-        octagon.rLineTo(0, halfHeight);
-        octagon.rLineTo(-quarterWidth, quarterHeight);
-        octagon.rLineTo(-halfWidth, 0);
-        octagon.rLineTo(-quarterWidth, -quarterHeight);
-        octagon.rLineTo(0, -halfHeight);
-        octagon.rLineTo(quarterWidth, -quarterHeight);
-        octagon.close();
+    public void setRect(Rect rect) {
+        this.rect = rect;
+        createOctagon(rect);
+    }
 
-
+    public Rect getRect() {
+        return rect;
     }
 
     public boolean contains(float x, float y){
@@ -59,6 +51,25 @@ public class NumberButton {
             return false;
 
         return true;
+    }
+
+    private void createOctagon(Rect rect){
+        halfWidth = rect.width() / 2.0f;
+        quarterWidth = halfWidth / 2.0f;
+        halfHeight = rect.height() / 2.0f;
+        quarterHeight = halfHeight / 2.0f;
+
+        octagon = new Path();
+        octagon.moveTo(rect.left + quarterWidth, rect.top);
+        octagon.rLineTo(halfWidth, 0);
+        octagon.rLineTo(quarterWidth, quarterHeight);
+        octagon.rLineTo(0, halfHeight);
+        octagon.rLineTo(-quarterWidth, quarterHeight);
+        octagon.rLineTo(-halfWidth, 0);
+        octagon.rLineTo(-quarterWidth, -quarterHeight);
+        octagon.rLineTo(0, -halfHeight);
+        octagon.rLineTo(quarterWidth, -quarterHeight);
+        octagon.close();
     }
 
     private static float sign (float p1x, float p1y, float p2x, float p2y, float p3x, float p3y)

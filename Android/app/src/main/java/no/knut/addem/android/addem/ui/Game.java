@@ -23,10 +23,11 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
 
     public final static String PLAYER_SOLUTION = "no.knut.addem.android.PLAYER_SOLUTION";
     public final static String OPTIMAL_SOLUTION = "no.knut.addem.android.OPTIMAL_SOLUTION";
+    public final static String BOARD = "no.knut.addem.android.BOARD";
     private final static String LOG_KEY = "Game";
 
     private EventBus eventBus;
-    private BoardView boardView;
+    private BoardInputView boardView;
     private TextView countDownTextView;
     private Context thisContext;
     private OptimalSolutionReadyEvent optimalSolutionEvent;
@@ -38,8 +39,8 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
         setContentView(R.layout.activity_game);
         optimalSolutionEvent = null;
         LinearLayout boardContainer = (LinearLayout) findViewById(R.id.boardContainer);
-        Board board = new Board(4, 4, 12);
-        boardView = new BoardView(this, board);
+        final Board board = new Board(4, 4, 12);
+        boardView = new BoardInputView(this, board);
         boardContainer.addView(boardView);
         findViewById(R.id.undoButton).setOnClickListener(this);
         findViewById(R.id.clearButton).setOnClickListener(this);
@@ -50,7 +51,7 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
 
         new OptimalSolution().execute(board);
 
-        timer = new CountDownTimer(35000, 1000) {
+        timer = new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 countDownTextView.setText(millisUntilFinished / 1000 + " sec remaining");
@@ -63,6 +64,7 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
                 Intent resultScreen = new Intent(thisContext, ResultScreen.class);
                 resultScreen.putExtra(OPTIMAL_SOLUTION, optimalSolutionEvent);
                 resultScreen.putExtra(PLAYER_SOLUTION, playerSolution);
+                resultScreen.putExtra(BOARD, board);
                 startActivity(resultScreen);
 
             }

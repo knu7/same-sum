@@ -25,4 +25,19 @@ public class Number implements Serializable{
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+
+        Number other = (Number) o;
+
+        if (other.row == row && other.column == column)
+            return true;
+
+        else return false;
+    }
+
+    @Override
+    public String toString() {
+        return "{ row:"+row + ", col:"+ column + ", val:" + value+ " }";
+    }
 }

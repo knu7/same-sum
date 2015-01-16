@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import no.knut.addem.android.addem.core.Number;
-
 public class Solution implements Serializable{
 
     public Set<Set<no.knut.addem.android.addem.core.Number>> sums;
@@ -72,6 +70,8 @@ public class Solution implements Serializable{
 
         if (sums.isEmpty()){
             score = 0;
+            correctSums = sums;
+            wrongSums = sums;
             return;
         }
 
@@ -110,6 +110,8 @@ public class Solution implements Serializable{
                 correctSums = equalSumsSet;
             }
         }
+        if (positiveScore == 0)
+            correctSums = new HashSet<>(0);
 
         negativeScore = 0;
         wrongSums = new HashSet<>();

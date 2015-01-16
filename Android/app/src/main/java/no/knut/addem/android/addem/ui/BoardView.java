@@ -40,11 +40,13 @@ public class BoardView extends View {
     protected Paint textPaint;
     protected float textHeight;
     private Settings settings;
+    protected int buttonWidth;
 
     public BoardView(Context context, Board board) {
         super(context);
         initialize(board);
         settings = new Settings();
+        resize(getWidth(), getHeight());
     }
 
     public BoardView(Context context, Board board, Settings settings) {
@@ -83,7 +85,7 @@ public class BoardView extends View {
         float allocatedWidth = w - w * settings.paddingPercentage;
         int maxWidth = (int)(allocatedWidth / columns);
         float spaceWidth = maxWidth * settings.percentageSpacingBetweenButtons;
-        int buttonWidth = (int) (maxWidth - spaceWidth);
+        buttonWidth = (int) (maxWidth - spaceWidth);
 
         int x = (int)(w / 2.0f - allocatedWidth / 2.0f + spaceWidth / 2.0f);
 

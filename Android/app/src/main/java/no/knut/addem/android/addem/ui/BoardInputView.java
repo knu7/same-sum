@@ -73,10 +73,11 @@ public class BoardInputView extends BoardView implements View.OnTouchListener {
 
     public Solution getSolution(){
         Set<Set<Number>> sumsAsSet = new HashSet<>(sums.size());
+        Set<Number> sumAsSet;
 
         for (Set<NumberButton> sum : sums){
 
-            Set<Number> sumAsSet = new HashSet<Number>(sum.size());
+            sumAsSet = new HashSet<>(sum.size());
             for( NumberButton button : sum ){
                 sumAsSet.add(button.number);
             }

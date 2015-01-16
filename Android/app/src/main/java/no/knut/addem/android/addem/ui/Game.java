@@ -39,7 +39,7 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
         setContentView(R.layout.activity_game);
         optimalSolutionEvent = null;
         LinearLayout boardContainer = (LinearLayout) findViewById(R.id.boardContainer);
-        final Board board = new Board(4, 4, 12);
+        final Board board = (Board) getIntent().getExtras().getSerializable(Game.BOARD);
         boardView = new BoardInputView(this, board);
         boardContainer.addView(boardView);
         findViewById(R.id.undoButton).setOnClickListener(this);
@@ -51,7 +51,7 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
 
         new OptimalSolution().execute(board);
 
-        timer = new CountDownTimer(15000, 1000) {
+        timer = new CountDownTimer(35000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 countDownTextView.setText(millisUntilFinished / 1000 + " sec remaining");

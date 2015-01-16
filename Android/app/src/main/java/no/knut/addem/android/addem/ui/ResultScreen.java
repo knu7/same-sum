@@ -36,9 +36,11 @@ public class ResultScreen extends ActionBarActivity {
 
         Solution playerSolution = (Solution) extras.getSerializable(Game.PLAYER_SOLUTION);
 
+        BoardView.Settings settings = new BoardView.Settings();
+        settings.percentageSpacingBetweenButtons = 0.1f;
         Board board = (Board)extras.getSerializable(Game.BOARD);
-        addContentView(new BoardScoreView(this, board, new BoardView.Settings(), playerSolution),
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        addContentView(new BoardScoreView(this, board, settings, playerSolution),
+                new ViewGroup.LayoutParams(400,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         TextView playerScoreTextView = (TextView) findViewById(R.id.yourScoreTextView);

@@ -36,10 +36,14 @@ public class Board implements Serializable{
         }
 
         this.columns = board[0].length;
-
         this.numbers = new Number[rows * columns];
-
-
+        int index = 0;
+        for (Number[] row  : board){
+            for (Number number: row){
+                numbers[index] = number;
+                index++;
+            }
+        }
     }
 
     public int getColumns() {

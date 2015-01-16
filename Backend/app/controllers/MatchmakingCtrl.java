@@ -23,7 +23,7 @@ public class MatchmakingCtrl extends Controller {
     	Game game = matchMaking.getNewGame(userId);
     	
     	if (game == null){
-    		return ok("Please wait for another player to join your game");
+    		return ok();
     	}
     	
     	Set<Player> players = game.getPlayers();

@@ -10,4 +10,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/responseText"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start 1st round"
+        android:id="@+id/playButton"
+        android:layout_below="@+id/responseText"
+        android:layout_toRightOf="@+id/responseText"
+        android:layout_toEndOf="@+id/responseText"
+        android:layout_marginTop="84dp" />
+
 </RelativeLayout>

@@ -60,7 +60,7 @@ public class BoardScoreView extends BoardView {
 
     private void drawSums(Canvas canvas, Set<Set<Number>> sums, Paint paint){
 
-        if (sums.isEmpty())
+        if (sums.size() < 2)
             return;
 
         List<NumberButton> sumButtons = new ArrayList<>();

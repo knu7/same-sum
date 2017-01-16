@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import no.knut.addem.android.addem.R;
 import no.knut.addem.android.addem.core.Board;
 import no.knut.addem.android.addem.core.Solution;
@@ -71,6 +72,7 @@ public class ResultScreen extends ActionBarActivity {
                 );
     }
 
+    @Subscribe
     public void onEventMainThread(OptimalSolutionReadyEvent event){
         displayOptimalSolution(event);
         progressDialog.dismiss();

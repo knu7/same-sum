@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,13 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import no.knut.addem.android.addem.R;
 import no.knut.addem.android.addem.core.Board;
 import no.knut.addem.android.addem.core.OptimalSolution;
 import no.knut.addem.android.addem.core.Solution;
 import no.knut.addem.android.addem.events.OptimalSolutionReadyEvent;
 
-public class Game extends ActionBarActivity implements View.OnClickListener{
+public class Game extends AppCompatActivity implements View.OnClickListener{
 
     public final static String PLAYER_SOLUTION = "no.knut.addem.android.PLAYER_SOLUTION";
     public final static String OPTIMAL_SOLUTION = "no.knut.addem.android.OPTIMAL_SOLUTION";
@@ -93,6 +95,7 @@ public class Game extends ActionBarActivity implements View.OnClickListener{
         }
     }
 
+    @Subscribe
     public void onEventMainThread(OptimalSolutionReadyEvent event){
         optimalSolutionEvent = event;
     }

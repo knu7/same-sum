@@ -38,7 +38,7 @@ public class Matchmaking extends ActionBarActivity implements View.OnClickListen
         playButton.setOnClickListener(this);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://192.168.0.15:9000")
+                .setEndpoint("http://107.6.175.212:9000")
                 .build();
 
         MatchmakingAPI matchmakingAPI = restAdapter.create(MatchmakingAPI.class);
@@ -58,7 +58,7 @@ public class Matchmaking extends ActionBarActivity implements View.OnClickListen
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("ERROOROROS", error.toString());
+                responseText.setText(error.toString());
             }
         });
 

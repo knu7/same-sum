@@ -42,10 +42,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener{
         optimalSolutionEvent = null;
         LinearLayout boardContainer = (LinearLayout) findViewById(R.id.boardContainer);
         final Board board = (Board) getIntent().getExtras().getSerializable(Game.BOARD);
-        boardView = new BoardInputView(this, board);
+        boardView = new BoardInputView(this, board, (TextView)findViewById(R.id.goalSumTextView));
         boardContainer.addView(boardView);
-        findViewById(R.id.undoButton).setOnClickListener(this);
-        findViewById(R.id.clearButton).setOnClickListener(this);
         countDownTextView = (TextView)findViewById(R.id.countDownTextView);
         thisContext = this;
         eventBus = EventBus.getDefault();
@@ -57,11 +55,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener{
 
             public void onTick(long millisUntilFinished) {
                 countDownTextView.setText(millisUntilFinished / 1000 + " sec remaining");
+
+
             }
 
             public void onFinish() {
                 boardView.deactivateInput();
-                countDownTextView.setText("0 sec remaining");
                 Solution playerSolution = boardView.getSolution();
                 Intent resultScreen = new Intent(thisContext, ResultScreen.class);
                 resultScreen.putExtra(OPTIMAL_SOLUTION, optimalSolutionEvent);
@@ -83,15 +82,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener{
 
     @Override public void onClick(View v) {
 
+
+
         switch (v.getId()){
 
-            case R.id.undoButton:
-                boardView.undoLastSum();
-                break;
-
-            case R.id.clearButton:
-                boardView.clearAllSums();
-                break;
         }
     }
 

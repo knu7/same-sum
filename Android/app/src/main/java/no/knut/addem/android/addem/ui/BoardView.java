@@ -3,9 +3,18 @@ package no.knut.addem.android.addem.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.util.Log;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 import no.knut.addem.android.addem.core.Board;
 import no.knut.addem.android.addem.core.Number;
@@ -20,7 +29,7 @@ public class BoardView extends View {
         public Settings(){
             paddingPercentage = 0.1f;
             percentageSpacingBetweenButtons = 0.3f;
-            textPaddingPercentage = 0.2f;
+            textPaddingPercentage = 0.3f;
         }
 
         public Settings(float paddingPercentage, float percentageSpacingBetweenButtons, float textPaddingPercentage){
@@ -34,6 +43,7 @@ public class BoardView extends View {
 
 
     protected NumberButton[] numberButtons;
+    protected List<ButtonLink> buttonLinks;
     private int columns;
     private int rows;
     protected Paint basicPaint;
@@ -60,9 +70,11 @@ public class BoardView extends View {
         columns = board.getColumns();
         rows = board.getRows();
         numberButtons = new NumberButton[rows * columns];
+        buttonLinks = new ArrayList<>();
         basicPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        basicPaint.setStyle(Paint.Style.FILL);
-        basicPaint.setColor(Color.LTGRAY);
+        basicPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        basicPaint.setStrokeWidth(15);
+        basicPaint.setColor(Color.rgb(115,116,109));
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextAlign(Paint.Align.CENTER);
@@ -98,19 +110,39 @@ public class BoardView extends View {
 
         for (NumberButton numberButton : numberButtons){
             int left = numberButton.number.getColumn() * ((int)spaceWidth + buttonWidth) + x;
-            int top = numberButton.number.getRow() * ((int)spaceWidth + buttonWidth);
+            int top = numberButton.number.getRow() * ((int)spaceWidth + buttonWidth) + (int)spaceWidth;
             Rect rect = new Rect(left, top, left + buttonWidth, top + buttonWidth);
             numberButton.setRect(rect);
+
+
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawLinks(canvas);
 
         for (NumberButton button : numberButtons){
             canvas.drawPath(button.octagon, button.paint);
+            canvas.save();
+            canvas.translate(button.getRect().centerX(), button.getRect().centerY());
+            canvas.drawCircle(0, 0, button.getCircleRadius(), button.borderPaint);
+            canvas.restore();
             canvas.drawText(""+button.number.getValue(), button.getRect().centerX(), button.getRect().centerY() + textHeight / 2.0f, textPaint);
+        }
+    }
+
+    private void drawLinks(Canvas canvas){
+        for (ButtonLink link : buttonLinks){
+            NumberButton source = link.getSource();
+            NumberButton destination = link.getDestination();
+
+            Path rect = new Path();
+            rect.moveTo(source.getRect().centerX(), source.getRect().centerY());
+            rect.lineTo(destination.getRect().centerX(), destination.getRect().centerY());
+
+            canvas.drawPath(rect, basicPaint);
         }
     }
 
@@ -121,4 +153,6 @@ public class BoardView extends View {
     public int getColumns() {
         return columns;
     }
+
+
 }

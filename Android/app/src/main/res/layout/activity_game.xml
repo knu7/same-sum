@@ -10,9 +10,10 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/boardContainer">
+        android:id="@+id/boardContainer"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -21,28 +22,24 @@
             android:layout_gravity="right"
             android:paddingBottom="20dp">
 
-            <Button
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Undo"
-                android:id="@+id/undoButton"
-                android:layout_gravity="center_horizontal" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clear"
-                android:id="@+id/clearButton"
-                android:layout_gravity="right" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Time: 30"
+                android:id="@+id/countDownTextView"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="30"
-                android:id="@+id/countDownTextView"
+                android:text="Goal sum: 45"
+                android:id="@+id/goalSumTextView"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:layout_weight="1" />
 
         </LinearLayout>
 

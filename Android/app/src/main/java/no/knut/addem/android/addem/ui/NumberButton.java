@@ -1,8 +1,13 @@
 package no.knut.addem.android.addem.ui;
 
+import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
+import android.graphics.Shader;
 
 import no.knut.addem.android.addem.core.Number;
 
@@ -11,6 +16,10 @@ public class NumberButton {
     public no.knut.addem.android.addem.core.Number number;
     public Path octagon;
     public Paint paint;
+    public Paint unknownPaint;
+    public Paint successPaint;
+    public Paint failurePaint;
+    public Paint borderPaint;
     private Rect rect;
     private float halfWidth;
     private float quarterWidth;
@@ -22,7 +31,30 @@ public class NumberButton {
         this.rect = rect;
         this.paint = paint;
 
+        borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        borderPaint.setStyle(Paint.Style.FILL);
+        borderPaint.setColor(Color.rgb(115,116,109));
+
+        unknownPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        unknownPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        unknownPaint.setShader(new RadialGradient(0, 0, 100, Color.argb(160,218,230,5), Color.argb(50, 218,230,5), Shader.TileMode.MIRROR));
+        unknownPaint.setStrokeWidth(15);
+
+        successPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        successPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        successPaint.setShader(new RadialGradient(0, 0, 100, Color.argb(160,0,189,4), Color.argb(50, 0,189,4), Shader.TileMode.MIRROR));
+        successPaint.setStrokeWidth(15);
+
+        failurePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        failurePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        failurePaint.setShader(new RadialGradient(0, 0, 100, Color.argb(160,207,10,7), Color.argb(50, 207,10,7), Shader.TileMode.MIRROR));
+        failurePaint.setColor(Color.rgb(207,10,7));
+        failurePaint.setStrokeWidth(15);
         createOctagon(rect);
+    }
+
+    public float getCircleRadius(){
+        return rect.width() / 2.0f;
     }
 
     public void setRect(Rect rect) {

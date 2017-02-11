@@ -13,6 +13,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import models.Number;
+import services.MatchmakingSocket;
 import services.interfaces.IMatchmaking;
 
 import com.google.inject.Inject;
@@ -27,6 +28,7 @@ public class MatchmakingCtrl extends Controller {
     	Game game = matchMaking.getNewGame(userId);
     	
     	if (game == null){
+    		new MatchmakingSocket();
     		return ok();
     	}
     	

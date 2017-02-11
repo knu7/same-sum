@@ -4,6 +4,8 @@ import play.mvc.WebSocket;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.LoggerFactory;
  
 public class MatchmakingSocket extends WebSocket<String> {
  
@@ -17,6 +19,7 @@ public class MatchmakingSocket extends WebSocket<String> {
    public void onReady(In<String> in, final Out<String> out) {
       outputs.add(out);
       in.onMessage(message -> {
+    	  LoggerFactory.getLogger(this.getClass()).debug(message);
          outputs.forEach(outt -> outt.write(message));
       });
  

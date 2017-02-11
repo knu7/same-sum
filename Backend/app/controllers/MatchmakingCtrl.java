@@ -28,7 +28,6 @@ public class MatchmakingCtrl extends Controller {
     	Game game = matchMaking.getNewGame(userId);
     	
     	if (game == null){
-    		new MatchmakingSocket();
     		return ok();
     	}
     	

@@ -25,11 +25,13 @@ public class Matchmaking implements IMatchmaking{
 	IGameService gameService;
 	private Queue<Player> playerQueue;
 	private Map<Integer, Game> activeGames;
+	private Map<Long, MatchmakingSocket> activeSockets;
 	
 	
 	public Matchmaking(){
 		playerQueue = new ConcurrentLinkedQueue<Player>();
 		activeGames = new HashMap<Integer, Game>();
+		activeSockets = new HashMap<Long, MatchmakingSocket>();
 	}
 	
 	@Override
@@ -42,6 +44,7 @@ public class Matchmaking implements IMatchmaking{
 		Player player = new Player(userId, "Guest " + userId);
 		if (playerQueue.isEmpty()){
 			playerQueue.add(player);
+			activeSockets.put(userId, new MatchmakingSocket());
 			return null;
 		}
 		else{

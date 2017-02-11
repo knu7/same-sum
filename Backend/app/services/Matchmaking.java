@@ -35,6 +35,10 @@ public class Matchmaking implements IMatchmaking{
 	@Override
 	public Game getNewGame(long userId) {
 		
+		if (isInQueue(userId)){
+			return null;
+		}
+		
 		Player player = new Player(userId, "Guest " + userId);
 		if (playerQueue.isEmpty()){
 			playerQueue.add(player);
@@ -52,6 +56,16 @@ public class Matchmaking implements IMatchmaking{
 		}
 		
 		
+	}
+	
+	private boolean isInQueue(long userId){
+		
+		for(Player player : playerQueue){
+			if(player.getId() == userId)
+				return true;
+		}
+		
+		return false;		
 	}
 
 }

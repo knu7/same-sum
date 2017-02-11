@@ -24,16 +24,12 @@ public class MatchmakingCtrl extends Controller {
 	
     public Result getMatch(long userId) {
     	
-    	Logger logger = LoggerFactory.getLogger("matchmaking");
-    	logger.debug("getMatch triggered");
     	Game game = matchMaking.getNewGame(userId);
     	
     	if (game == null){
-    		logger.debug("No match");
     		return ok();
     	}
     	
-    	logger.debug("Got match");
     	
     	Set<Player> players = game.getPlayers();
     	String[] opponents = new String[players.size()-1];
@@ -47,7 +43,6 @@ public class MatchmakingCtrl extends Controller {
     	
     	BoardResponse response = new BoardResponse(game.getId(), opponents , game.getRounds()[0].getBoard());
     	
-    	logger.debug("returning match " + response.toString());
         return ok(Json.toJson(response));
     }
 

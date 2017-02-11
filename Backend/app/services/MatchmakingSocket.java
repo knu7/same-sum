@@ -17,9 +17,10 @@ public class MatchmakingSocket extends WebSocket<String> {
  
    @Override
    public void onReady(In<String> in, final Out<String> out) {
+	   LoggerFactory.getLogger(this.getClass()).info("connected");
       outputs.add(out);
       in.onMessage(message -> {
-    	  LoggerFactory.getLogger(this.getClass()).debug(message);
+LoggerFactory.getLogger(this.getClass()).debug(message);
          outputs.forEach(outt -> outt.write(message));
       });
  

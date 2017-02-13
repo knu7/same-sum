@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import models.Game;
 import models.Player;
 import models.response.BoardResponse;
+import play.libs.F.Callback;
+import play.libs.F.Callback0;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 import models.Number;
 import services.MatchmakingSocket;
 import services.interfaces.IMatchmaking;
@@ -45,6 +48,39 @@ public class MatchmakingCtrl extends Controller {
     	BoardResponse response = new BoardResponse(game.getId(), opponents , game.getRounds()[0].getBoard());
     	
         return ok(Json.toJson(response));
+    }
+    
+    public static WebSocket<String> ws() {
+        return new WebSocket<String>() {
+
+            // Called when the Websocket Handshake is done.
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
+
+                // For each event received on the socket,
+                in.onMessage(new Callback<String>() {
+                    public void invoke(String event) {
+
+                        // Log events to the console
+                        System.out.println(event);
+
+                    }
+                });
+
+                // When the socket is closed.
+                in.onClose(new Callback0() {
+                    public void invoke() {
+
+                        System.out.println("Disconnected");
+
+                    }
+                });
+
+                // Send a single 'Hello!' message
+                out.write("Hello!");
+
+            }
+
+        };
     }
 
 }

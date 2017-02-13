@@ -4,6 +4,7 @@
 
 # Home page
 GET     /matchmaking/:userId 					@controllers.MatchmakingCtrl.getMatch(userId:Long)
+GET		/ws										controllers.MatchmakingCtrl.ws()
 #GET		/games/:gameId/current-round/:userId		
 
 # Map static resources from the /public folder to the /assets URL path
